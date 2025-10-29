@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Wellness Advisor 🧠</title>
+    <!-- 1. CRITICAL: Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Configuration for Professional Look */
+        :root {
+            --color-primary: #4c51bf; /* Indigo */
+            --color-secondary: #38a169; /* Emerald Green */
+            --color-bg-light: #f7f9fb;
+            --color-card-light: #ffffff;
+            --color-text-light: #1a202c;
+        }
+
+        /* Dark Mode Override */
+        .dark {
+            --color-bg-light: #1a202c;
+            --color-card-light: #2d3748;
+            --color-text-light: #e2e8f0;
+            --color-primary: #667eea;
+            --color-secondary: #68d391;
+        }
+
+        /* Custom Styles for Button Animation (Hover Effect) */
+        .btn-animation {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .btn-animation:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 20px -3px rgba(76, 81, 191, 0.4), 0 6px 10px -2px rgba(76, 81, 191, 0.3);
+        }
+
+        .dark .btn-animation:hover {
+            box-shadow: 0 15px 20px -3px rgba(102, 126, 234, 0.5), 0 6px 10px -2px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Adjust the image grid for mobile/desktop */
+        @media (min-width: 768px) {
+            .media-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 767px) {
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ANIMATION: Subtle slide-up and fade-in for content blocks */
+        .content-anim {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .content-anim.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-[var(--color-bg-light)] text-[var(--color-text-light)] transition-colors duration-500 min-h-screen relative">
+
+    <!-- 1. Dark Mode Toggle -->
+    <button id="dark-mode-toggle" class="fixed top-5 right-5 p-2 rounded-full bg-[var(--color-card-light)] text-[var(--color-text-light)] border border-gray-300 dark:border-gray-600 shadow-md z-50 transition-colors duration-300">
+        <span class="dark:hidden">🌙</span>
+        <span class="hidden dark:inline">☀</span>
+    </button>
+
+    <!-- Header (Professional Look - Centered Name) -->
+    <header class="bg-[var(--color-card-light)] shadow-sm dark:shadow-lg sticky top-0 z-40 border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-center items-center relative">
+            <!-- Title is centered -->
+            <div class="flex items-center space-x-2">
+                <span class="text-3xl text-primary">🧠</span>
+                <h1 class="text-2xl font-bold text-[var(--color-text-light)]">Digital Balance</h1>
+            </div>
+            <!-- Navigation fixed to the right on desktop, allowing the title to appear centered -->
+            <nav class="hidden md:flex space-x-6 text-sm font-medium absolute right-4 lg:right-8">
+                <a href="#homepage" class="hover:text-primary transition">Home</a>
+                <a href="javascript:void(0)" onclick="startAssessment()" class="hover:text-primary transition">Advisor</a>
+                <a href="#resources" class="hover:text-primary transition">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+
+        <!-- Home Page Section (Visible by Default) -->
+        <section id="homepage" class="flex flex-col items-center justify-center min-h-[70vh] text-center transition-opacity duration-700">
+            <h2 class="text-5xl md:text-6xl font-extrabold text-[var(--color-text-light)] mb-4 leading-tight">
+                Reclaim Your Focus. Achieve <span class="text-primary">Digital Wellness.</span>
+            </h2>
+            <p class="text-xl max-w-3xl mb-10 text-gray-600 dark:text-gray-400 content-anim">
+                "Digital life should support, not suppress, your real life." – We analyze your habits to provide personalized, actionable advice for decreasing screen-time stress.
+            </p>
+
+            <!-- Get Started Button with Hover Animation -->
+            <button id="get-started-btn" onclick="startAssessment()" class="btn-animation px-12 py-4 bg-secondary text-white font-bold rounded-lg text-xl shadow-lg hover:bg-green-600 dark:hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-secondary/50 mb-16 content-anim">
+                Get Started Now 🚀
+            </button>
+
+            <div class="w-full">
+                <!-- Image Placeholders (Mobile: Stacked, Desktop: 3-column grid) -->
+                <h3 class="text-3xl font-bold text-[var(--color-text-light)] mb-6 mt-8 content-anim">Visualize Your Balance</h3>
+                <div class="media-grid grid gap-6">
+                    <!-- Image Placeholder 1 -->
+                    <div class="rounded-xl shadow-xl bg-[var(--color-card-light)] p-4 border border-gray-200 dark:border-gray-700 transform transition duration-500 hover:shadow-2xl hover:-translate-y-1 content-anim">
+                         <div class="h-40 w-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-gray-500 font-medium rounded-lg">
+                            [Image: Focus & Productivity]
+                        </div>
+                        <p class="mt-3 text-sm font-semibold">Regaining Focus</p>
+                    </div>
+
+                    <!-- Image Placeholder 2 -->
+                    <div class="rounded-xl shadow-xl bg-[var(--color-card-light)] p-4 border border-gray-200 dark:border-gray-700 transform transition duration-500 hover:shadow-2xl hover:-translate-y-1 content-anim" style="transition-delay: 100ms;">
+                        <div class="h-40 w-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-gray-500 font-medium rounded-lg">
+                            [Image: Sleep & Rest]
+                        </div>
+                        <p class="mt-3 text-sm font-semibold">Improving Sleep Quality</p>
+                    </div>
+
+                    <!-- Image Placeholder 3 -->
+                    <div class="rounded-xl shadow-xl bg-[var(--color-card-light)] p-4 border border-gray-200 dark:border-gray-700 transform transition duration-500 hover:shadow-2xl hover:-translate-y-1 content-anim" style="transition-delay: 200ms;">
+                        <div class="h-40 w-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-gray-500 font-medium rounded-lg">
+                            [Image: Healthy Habits]
+                        </div>
+                        <p class="mt-3 text-sm font-semibold">Active Lifestyle</p>
+                    </div>
+                </div>
+
+                <!-- Video Placeholders (Below Images) -->
+                <h3 id="resources" class="text-3xl font-bold text-[var(--color-text-light)] mb-6 mt-16 content-anim">Expert Tips & Videos</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Video Placeholder 1 (Embed) -->
+                    <div class="aspect-video bg-gray-300 dark:bg-gray-700 rounded-xl shadow-xl flex items-center justify-center text-gray-500 font-medium transform transition duration-500 hover:shadow-2xl content-anim" style="transition-delay: 300ms;">
+                        [Video Placeholder: Guided Digital Detox (e.g., YouTube Link)]
+                    </div>
+                    <!-- Video Placeholder 2 (Embed) -->
+                    <div class="aspect-video bg-gray-300 dark:bg-gray-700 rounded-xl shadow-xl flex items-center justify-center text-gray-500 font-medium transform transition duration-500 hover:shadow-2xl content-anim" style="transition-delay: 400ms;">
+                        [Video Placeholder: Mindfulness for Screen Overload (e.g., YouTube Link)]
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Page Section (Hidden by Default) -->
+        <section id="form-page" class="hidden max-w-4xl mx-auto py-10 transition-opacity duration-700">
+            <h2 class="text-4xl font-bold text-primary mb-2">Your Wellness Data 📝</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">Tell us about your current habits to generate your personalized advisor report.</p>
+
+            <form id="wellness-form" class="bg-[var(--color-card-light)] p-6 md:p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Input Fields -->
+                    <div class="flex flex-col"><label for="screen-time" class="mb-2 font-semibold text-[var(--color-text-light)]">📱 Daily Screen Time (hours):</label><input type="number" id="screen-time" name="screen-time" min="0" max="24" step="0.5" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required></div>
+                    <div class="flex flex-col"><label for="sleep-hours" class="mb-2 font-semibold text-[var(--color-text-light)]">😴 Sleep Hours (hours):</label><input type="number" id="sleep-hours" name="sleep-hours" min="0" max="15" step="0.5" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required></div>
+                    <div class="flex flex-col"><label for="social-media-hours" class="mb-2 font-semibold text-[var(--color-text-light)]">🤳 Social Media Hours (hours):</label><input type="number" id="social-media-hours" name="social-media-hours" min="0" max="10" step="0.5" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required></div>
+                    <div class="flex flex-col"><label for="physical-activity" class="mb-2 font-semibold text-[var(--color-text-light)]">🏃 Physical Activity (hours):</label><input type="number" id="physical-activity" name="physical-activity" min="0" max="10" step="0.5" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required></div>
+                    <div class="flex flex-col"><label for="mood" class="mb-2 font-semibold text-[var(--color-text-light)]">😊 Mood Level (1=Bad, 5=Great):</label><select id="mood" name="mood" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required><option value="">-- Select --</option><option value="1">1 (Very Low/Stressed)</option><option value="2">2 (Low)</option><option value="3">3 (Neutral)</option><option value="4">4 (Good)</option><option value="5">5 (Great/Excellent)</option></select></div>
+                    <div class="flex flex-col"><label for="stress-level" class="mb-2 font-semibold text-[var(--color-text-light)]">😥 Stress Level (1=Low, 5=High):</label><select id="stress-level" name="stress-level" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required><option value="">-- Select --</option><option value="1">1 (Very Low)</option><option value="2">2 (Low)</option><option value="3">3 (Moderate)</option><option value="4">4 (High)</option><option value="5">5 (Very High)</option></select></div>
+                    <div class="flex flex-col"><label for="age-group" class="mb-2 font-semibold text-[var(--color-text-light)]">👶 Age Group:</label><select id="age-group" name="age-group" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required><option value="">-- Select --</option><option value="teen">Under 18</option><option value="young-adult">18-25</option><option value="adult">26-45</option><option value="middle-age">46-65</option><option value="senior">65+</option></select></div>
+                    <div class="flex flex-col"><label for="profession" class="mb-2 font-semibold text-[var(--color-text-light)]">👨‍💼 Your Profession/Role:</label><input type="text" id="profession" name="profession" placeholder="e.g., Student, Software Engineer, Freelancer" class="p-3 border border-gray-300 rounded-lg bg-[var(--color-bg-light)] dark:border-gray-600 focus:ring-primary focus:border-primary transition" required></div>
+                </div>
+
+                <button type="submit" id="calculate-btn" class="w-full mt-8 py-3 bg-primary text-white font-bold rounded-lg text-lg hover:bg-indigo-700 dark:hover:bg-indigo-400 focus:outline-none focus:ring-4 focus:ring-primary/50 transition duration-300">
+                    Get Personalized Advice 💡
+                </button>
+            </form>
+
+            <!-- Advice Output Section -->
+            <div id="advice-output" class="mt-10 p-6 rounded-xl border-2 border-primary bg-indigo-50 dark:bg-indigo-900/20 shadow-2xl hidden transition duration-500 ease-in-out">
+                <h3 class="text-4xl font-bold text-primary mb-6 flex items-center">
+                    <span class="mr-2">✨</span> Your Digital Wellness Advisor Report
+                </h3>
+                
+                <!-- Physical Wellness Section (Category 1) -->
+                <div id="physical-advice-container" class="mb-8 p-4 bg-[var(--color-card-light)] rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <h4 class="text-2xl font-semibold text-secondary mb-3 border-b pb-2 border-gray-200 dark:border-gray-700">
+                        🏃 Physical Wellness
+                    </h4>
+                    <div id="physical-advice-list">
+                        <!-- Content injected here -->
+                    </div>
+                </div>
+
+                <!-- Mental Wellness Section (Category 2) -->
+                <div id="mental-advice-container" class="mb-8 p-4 bg-[var(--color-card-light)] rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <h4 class="text-2xl font-semibold text-secondary mb-3 border-b pb-2 border-gray-200 dark:border-gray-700">
+                        🧠 Mental & Emotional Wellness
+                    </h4>
+                    <div id="mental-advice-list">
+                        <!-- Content injected here -->
+                    </div>
+                </div>
+
+                <!-- Unique Quote -->
+                <div id="advice-quote" class="mt-6 p-4 rounded-xl bg-primary/10 dark:bg-primary/20 text-[var(--color-text-light)] italic border border-primary/20">
+                    <!-- Quote injected here -->
+                </div>
+
+            </div>
+            
+             <button onclick="goHome()" class="mt-6 text-primary hover:text-indigo-700 dark:hover:text-indigo-400 font-semibold transition flex items-center">
+                <span class="mr-1">⬅</span> Back to Home
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--color-card-light)] mt-10 border-t border-gray-200 dark:border-gray-700 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            <p>&copy; 2024 Digital Wellness Advisor. All rights reserved.</p>
+            <p class="mt-2">Focus on your well-being, one byte at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Core Data: Quotes and Complex Advice Structure ---
+
+        const wellnessQuotes = [
+            { text: "The internet is a tool, not a home. Use it wisely.", category: "Mental" },
+            { text: "Rest is not idleness; it's essential for the engine to cool down.", category: "Physical" },
+            { text: "The quality of your life is the quality of your focus.", category: "Mental" },
+            { text: "Take care of your body. It’s the only place you have to live.", category: "Physical" },
+            { text: "In an age of constant distraction, paying attention is an act of resistance.", category: "Mental" },
+            { text: "Movement is a medicine for creating change in a person's physical and emotional states.", category: "Physical" },
+            { text: "You don't find the time to relax; you make the time to relax.", category: "Mental" },
+            { text: "Small steps in the right direction are better than big steps in the wrong direction.", category: "Mental" },
+            { text: "Deep sleep is the secret ingredient to peak digital performance.", category: "Physical" },
+            { text: "Unplugging is the ultimate power move for recharging your brain.", category: "Mental" }
+        ];
+
+        // Complex Advice Matrix: Advice is triggered by a combination of factors (checked by the conditions function)
+        const adviceMatrix = [
+            // --- Advice 1: Extreme Burnout Risk (High Screen + Low Sleep) ---
+            {
+                title: 'Critical Burnout Alert: Screen Time vs. Sleep',
+                category: 'Physical',
+                action: 'Implement a *rigid digital curfew* and stop using screens in your bedroom entirely.',
+                example: 'Charge your phone in the kitchen or living room overnight. This forces you to use an analog alarm clock and prevents the last hour before sleep and the first hour upon waking from being dominated by blue light and notification interruptions.',
+                conditions: (data) => data.screenTime >= 10 && data.sleepHours < 6.5
+            },
+            // --- Advice 2: Social Media Anxiety Loop (High SM + High Stress) ---
+            {
+                title: 'Breaking the Social Comparison Cycle',
+                category: 'Mental',
+                action: 'Perform a *social media audit* and proactively mute/unfollow stress-inducing accounts.',
+                example: 'For one week, only follow accounts that provide actionable value (e.g., educational, skill-based, or genuine friends). If you feel worse after checking an account, mute or unfollow it immediately. Use the "Friends Only" or "Favorites" list features if available.',
+                conditions: (data) => data.socialMediaHours >= 2.5 && data.stressLevel >= 4
+            },
+            // --- Advice 3: Sedentary Lifestyle (Low Activity + Low Mood) ---
+            {
+                title: 'Movement as a Mood Regulator',
+                category: 'Physical',
+                action: 'Schedule *mandatory outdoor micro-breaks* to boost both physical health and mood.',
+                example: 'Set a daily reminder at 11:00 AM and 3:00 PM to take a 10-minute walk outside, even if it\'s just around the block. Sunlight exposure and light activity are scientifically proven stress reducers that break up sedentary screen periods.',
+                conditions: (data) => data.physicalActivity < 0.5 && data.mood <= 2
+            },
+            // --- Advice 4: High Focus/Work Demands (Student/Engineer/Adult Overload) ---
+            {
+                title: 'Optimizing Deep Work Flow',
+                category: 'Mental',
+                action: 'Adopt the *"Batching" principle* for communication to protect cognitive resources.',
+                example: 'If your profession (e.g., software engineer, student, analyst) requires deep focus, close all messaging apps and email programs for 90-minute blocks. Only check them during the scheduled break. This trains your brain to sustain focus without distraction spikes.',
+                conditions: (data) => (data.profession.toLowerCase().includes('student') || data.profession.toLowerCase().includes('engineer') || data.ageGroup === 'adult') && data.screenTime > 9
+            },
+            // --- Advice 5: Low Energy Reserves (Low Sleep + High Stress) ---
+            {
+                title: 'Conserving Mental Energy',
+                category: 'Mental',
+                action: 'Implement a *"No Decisions After 8 PM"* rule to reduce evening mental load.',
+                example: 'Pre-load all non-screen-related activities (e.g., lay out workout clothes, pack lunch, plan a book to read) before 8 PM. This conserves the limited mental willpower depleted by work and screens, promoting better relaxation before bed.',
+                conditions: (data) => data.sleepHours < 7.5 && data.stressLevel >= 3
+            },
+            // --- Advice 6: General Disconnect (High Screen + Low Activity) ---
+            {
+                title: 'The Weekend Digital Diet',
+                category: 'Physical',
+                action: 'Schedule one 3-hour block on a weekend for a *screen-free hobby* or activity.',
+                example: 'Engage in a non-digital activity like cooking a complex meal, gardening, drawing, or spending time with a friend without phone interruptions. The goal is to remind your brain of the value of focused, real-world engagement.',
+                conditions: (data) => data.screenTime >= 8 && data.physicalActivity < 1
+            },
+            // --- Advice 7: Eye Strain/Posture (Very High Screen Time) ---
+            {
+                title: 'Guard Your Eyes and Spine',
+                category: 'Physical',
+                action: 'Implement the *20-20-20 Rule* and invest in ergonomic posture support.',
+                example: 'Every 20 minutes, look at something 20 feet away for at least 20 seconds. Use a standing desk converter or stack books to ensure your screen is at eye level, which drastically reduces neck strain.',
+                conditions: (data) => data.screenTime >= 11
+            },
+            // --- Advice 8: Mood and Screen Time Correlation (Low Mood + High Screen) ---
+            {
+                title: 'Mindful Consumption Check',
+                category: 'Mental',
+                action: 'Use a *Digital Mood Journal* to track the emotional ROI of your screen time.',
+                example: 'Before opening an app (like social media or video streaming), rate your current mood (1-5). After 15 minutes, rate it again. If the mood drops, log off. This creates immediate, conscious feedback about whether the activity is serving you.',
+                conditions: (data) => data.mood <= 2 && data.screenTime > 6
+            },
+        ];
+
+        // --- Utility Functions ---
+
+        function getRandomQuote(category) {
+            const relevantQuotes = wellnessQuotes.filter(q => q.category === category);
+            // Fallback to all quotes if no relevant ones are found
+            const quotesToUse = relevantQuotes.length > 0 ? relevantQuotes : wellnessQuotes;
+            
+            const index = Math.floor(Math.random() * quotesToUse.length);
+            return quotesToUse[index].text;
+        }
+
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const html = document.documentElement;
+
+        // 1. Load saved preference
+        const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+        if (isDarkMode) {
+            html.classList.add('dark');
+        }
+
+        // 2. Event listener for toggle button
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // --- Content Animation Observer ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const contentAnims = document.querySelectorAll('.content-anim');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px',
+                threshold: 0.1
+            });
+
+            contentAnims.forEach(el => observer.observe(el));
+        });
+
+        // --- Page Navigation JavaScript (Home/Form Toggle) ---
+        const homePage = document.getElementById('homepage');
+        const formPage = document.getElementById('form-page');
+        const adviceOutput = document.getElementById('advice-output');
+
+        function startAssessment() {
+            homePage.style.opacity = 0;
+            setTimeout(() => {
+                homePage.classList.add('hidden');
+                formPage.classList.remove('hidden');
+                formPage.style.opacity = 1;
+                adviceOutput.classList.add('hidden'); // Ensure advice is hidden on start
+            }, 500); // Match transition duration
+        }
+        
+        function goHome() {
+            formPage.style.opacity = 0;
+            adviceOutput.classList.add('hidden'); // Hide advice when going home
+            setTimeout(() => {
+                formPage.classList.add('hidden');
+                homePage.classList.remove('hidden');
+                homePage.style.opacity = 1;
+            }, 500); // Match transition duration
+        }
+
+
+        // --- NEW Digital Wellness Advisor Logic (Form Submission) ---
+        document.getElementById('wellness-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // A. Gather all user data (parsed and lowercased for comparison)
+            const data = {
+                screenTime: parseFloat(document.getElementById('screen-time').value),
+                sleepHours: parseFloat(document.getElementById('sleep-hours').value),
+                socialMediaHours: parseFloat(document.getElementById('social-media-hours').value),
+                physicalActivity: parseFloat(document.getElementById('physical-activity').value),
+                mood: parseInt(document.getElementById('mood').value),
+                stressLevel: parseInt(document.getElementById('stress-level').value),
+                ageGroup: document.getElementById('age-group').value,
+                profession: document.getElementById('profession').value.toLowerCase().trim()
+            };
+
+            // B. Initialize output arrays
+            let physicalAdvice = [];
+            let mentalAdvice = [];
+            
+            let issuesDetected = false;
+
+            // C. Generate Advice by checking the complex conditions
+            adviceMatrix.forEach(advice => {
+                if (advice.conditions(data)) {
+                    issuesDetected = true;
+                    if (advice.category === 'Physical') {
+                        physicalAdvice.push(advice);
+                    } else {
+                        mentalAdvice.push(advice);
+                    }
+                }
+            });
+            
+            // D. Handle 'Excellent Balance' case if no complex issues were detected
+            if (!issuesDetected) {
+                if (data.screenTime < 7 && data.sleepHours >= 7 && data.stressLevel <= 2 && data.physicalActivity >= 1) {
+                    mentalAdvice.push({
+                        title: 'EXCELLENT DIGITAL BALANCE! 👍',
+                        action: 'Maintain your current conscious approach to technology.',
+                        example: 'You have a healthy digital diet. To continue improving, try introducing a "Creative Hour" once a week where you actively create content (write, draw, code) rather than consuming it. Well done!',
+                        category: 'Mental'
+                    });
+                } else {
+                    // Fallback advice if specific conditions aren't met but some scores are poor
+                    if (data.screenTime > 7) {
+                        mentalAdvice.push({
+                            title: 'General Screen Overload',
+                            action: 'Start with one hour of mandatory non-screen time immediately after dinner.',
+                            example: 'Use this time to connect with family, read a physical book, or prep for the next day. This creates a critical buffer zone before bed.',
+                            category: 'Mental'
+                        });
+                    }
+                    if (data.physicalActivity < 1) {
+                        physicalAdvice.push({
+                            title: 'Increase Foundational Activity',
+                            action: 'Take all calls and listen to all podcasts/audiobooks while standing or walking.',
+                            example: 'Instead of sitting while listening to a meeting or a podcast, put on your headphones and walk around the office or your home. This subtle change adds significant steps over a week.',
+                            category: 'Physical'
+                        });
+                    }
+                }
+            }
+
+
+            // E. Render the results
+            
+            const renderAdvice = (adviceArray, listElementId) => {
+                const list = document.getElementById(listElementId);
+                
+                if (adviceArray.length === 0) {
+                    list.innerHTML = '<p class="text-gray-600 dark:text-gray-400 italic">This area shows healthy habits! No specific advice needed at this time, but continue to monitor your balance.</p>';
+                    return;
+                }
+                
+                list.innerHTML = adviceArray.map(item => `
+                    <div class="mb-4 border-l-4 border-primary/50 pl-3">
+                        <p class="font-semibold text-[var(--color-text-light)]">${item.title}</p>
+                        <p class="text-sm mt-1">
+                            <span class="font-bold text-secondary">Action:</span> ${item.action}<br>
+                            <span class="font-bold text-primary">Example:</span> ${item.example}
+                        </p>
+                    </div>
+                `).join('');
+            };
+
+            renderAdvice(physicalAdvice, 'physical-advice-list');
+            renderAdvice(mentalAdvice, 'mental-advice-list');
+            
+            // F. Set Quote
+            // Determine the category with more issues/advice to influence the quote
+            const quoteCategory = (physicalAdvice.length >= mentalAdvice.length) ? 'Physical' : 'Mental'; 
+            
+            const finalQuote = getRandomQuote(quoteCategory);
+
+            document.getElementById('advice-quote').innerHTML = `
+                <p class="text-lg font-medium text-[var(--color-text-light)]">
+                    <span class="text-primary text-2xl mr-2">❝</span> ${finalQuote} 
+                </p>
+            `;
+
+            // G. Show the results section
+            adviceOutput.classList.remove('hidden');
+            adviceOutput.style.opacity = 0;
+            setTimeout(() => {
+                adviceOutput.style.opacity = 1;
+                adviceOutput.scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+        });
+    </script>
+
+</body>
+</html>
